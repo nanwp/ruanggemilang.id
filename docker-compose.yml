@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    image: gemilang-web:latest
+    container_name: gemilang-web
+    restart: unless-stopped
+    ports:
+      # Hanya bisa diakses dari VPS itu sendiri; nginx host yang meneruskan ke sini.
+      # Ganti WEB_PORT di .env kalau 8080 sudah terpakai.
+      - "127.0.0.1:${WEB_PORT:-8010}:80"

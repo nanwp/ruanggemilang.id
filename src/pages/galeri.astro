@@ -1,0 +1,207 @@
+---
+import Base from '../layouts/Base.astro';
+import { galeri, fotoUrl } from '../data/galeri';
+import { kontak } from '../data/site';
+
+const daftarKegiatan = [...new Set(galeri.map((f) => f.kegiatan))];
+---
+
+<Base title="Galeri" description="Dokumentasi kegiatan belajar dan acara Komunitas Gemilang.">
+  <header class="wrap page-head">
+    <p class="catatan">Dokumentasi</p>
+    <h1>Galeri kegiatan</h1>
+    <p class="lead">
+      Potret anak-anak, relawan, dan warga dari kelas pekanan sampai festival. Ikuti
+      <a href={kontak.instagram.url} target="_blank" rel="noopener">{kontak.instagram.handle}</a> untuk cerita terbaru.
+    </p>
+  </header>
+
+  <section class="wrap galeri-wrap">
+    {galeri.length === 0 ? (
+      <p class="kosong">Belum ada foto. Tambahkan foto di <code>src/data/galeri.ts</code>.</p>
+    ) : (
+      <>
+        {daftarKegiatan.length > 1 && (
+          <div class="filter" role="group" aria-label="Saring berdasarkan kegiatan">
+            <button type="button" aria-pressed="true" data-filter="semua">Semua <span>{galeri.length}</span></button>
+            {daftarKegiatan.map((k) => (
+              <button type="button" aria-pressed="false" data-filter={k}>
+                {k} <span>{galeri.filter((f) => f.kegiatan === k).length}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        <ul class="galeri" id="galeri">
+          {galeri.map((f, i) => (
+            <li data-kegiatan={f.kegiatan}>
+              <button type="button" class="galeri__btn" data-index={i} aria-label={`Perbesar foto: ${f.alt}`}>
+                <img src={fotoUrl(f.src)} alt={f.alt} loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />
+                <span class="galeri__ket">
+                  {f.kegiatan}, {f.tanggal ?? f.tahun}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </>
+    )}
+  </section>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Foto diperbesar">
+    <button type="button" class="lightbox__tutup" data-aksi="tutup" aria-label="Tutup">×</button>
+    <button type="button" class="lightbox__nav lightbox__nav--kiri" data-aksi="sebelum" aria-label="Foto sebelumnya">‹</button>
+    <figure>
+      <img id="lightbox-img" alt="" />
+      <figcaption id="lightbox-ket"></figcaption>
+    </figure>
+    <button type="button" class="lightbox__nav lightbox__nav--kanan" data-aksi="sesudah" aria-label="Foto berikutnya">›</button>
+  </dialog>
+
+  <script is:inline define:vars={{ data: galeri.map((f) => ({ ...f, src: fotoUrl(f.src) })) }}>
+    const dialog = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img');
+    const ket = document.getElementById('lightbox-ket');
+    const items = [...document.querySelectorAll('#galeri li')];
+    let sekarang = 0;
+
+    const terlihat = () => items.filter((li) => !li.hidden).map((li) => Number(li.querySelector('button').dataset.index));
+
+    function tampil(i) {
+      const f = data[i];
+      sekarang = i;
+      img.src = f.src;
+      img.alt = f.alt;
+      ket.textContent = `${f.alt}. ${f.kegiatan}, ${f.tanggal ?? f.tahun}`;
+    }
+    function geser(arah) {
+      const urut = terlihat();
+      const pos = urut.indexOf(sekarang);
+      tampil(urut[(pos + arah + urut.length) % urut.length]);
+    }
+
+    document.getElementById('galeri')?.addEventListener('click', (e) => {
+      const btn = e.target.closest('.galeri__btn');
+      if (!btn) return;
+      tampil(Number(btn.dataset.index));
+      dialog.showModal();
+    });
+    dialog.addEventListener('click', (e) => {
+      const aksi = e.target.closest('[data-aksi]')?.dataset.aksi;
+      if (aksi === 'tutup' || e.target === dialog) dialog.close();
+      if (aksi === 'sebelum') geser(-1);
+      if (aksi === 'sesudah') geser(1);
+    });
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') geser(-1);
+      if (e.key === 'ArrowRight') geser(1);
+    });
+
+    const tombol = [...document.querySelectorAll('.filter button')];
+    tombol.forEach((b) =>
+      b.addEventListener('click', () => {
+        const k = b.dataset.filter;
+        tombol.forEach((t) => t.setAttribute('aria-pressed', String(t === b)));
+        items.forEach((li) => (li.hidden = k !== 'semua' && li.dataset.kegiatan !== k));
+      })
+    );
+  </script>
+</Base>
+
+<style>
+  .galeri-wrap { padding-bottom: clamp(64px, 9vw, 120px); }
+
+  .filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .filter button {
+    font: 600 0.95rem/1 var(--f-body);
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 2px solid var(--biru-tua);
+    background: var(--putih);
+    color: var(--biru-tua);
+    cursor: pointer;
+  }
+  .filter button span { opacity: 0.6; margin-left: 4px; }
+  .filter button:hover { background: var(--biru-muda); }
+  .filter button[aria-pressed='true'] { background: var(--biru-tua); color: var(--putih); }
+
+  .galeri { list-style: none; margin: 0; padding: 0; columns: 3 260px; column-gap: 14px; }
+  .galeri li { break-inside: avoid; margin-bottom: 14px; }
+  .galeri li[hidden] { display: none; }
+  .galeri__btn {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: var(--biru-muda);
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    cursor: zoom-in;
+  }
+  .galeri__btn img { width: 100%; height: auto; min-height: 120px; object-fit: cover; }
+  @media (max-width: 600px) {
+    .filter {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .filter::-webkit-scrollbar { display: none; }
+    .filter button { flex: none; padding: 9px 14px; font-size: 0.9rem; }
+    .galeri { columns: 2; column-gap: 8px; }
+    .galeri li { margin-bottom: 8px; }
+    .galeri__ket { left: 6px !important; bottom: 6px !important; font-size: 0.7rem !important; padding: 3px 8px !important; }
+  }
+  .galeri__ket {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.92);
+    color: var(--biru-tua);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .kosong { padding: 48px; border: 2px dashed var(--biru); border-radius: var(--r-md); text-align: center; max-width: none; }
+
+  .lightbox {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 16px;
+    border: 0;
+    background: rgb(7 20 38 / 0.97);
+    color: var(--putih);
+  }
+  .lightbox[open] { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; }
+  .lightbox::backdrop { background: transparent; }
+  .lightbox figure { margin: 0; display: grid; justify-items: center; gap: 12px; min-width: 0; }
+  .lightbox img { max-width: 100%; max-height: calc(100dvh - 120px); object-fit: contain; border-radius: var(--r-sm); }
+  .lightbox figcaption { font-size: 0.95rem; text-align: center; max-width: 60ch; color: #d3dbe6; }
+  .lightbox button {
+    background: rgb(255 255 255 / 0.12);
+    color: var(--putih);
+    border: 0;
+    border-radius: 999px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .lightbox button:hover { background: var(--pensil); color: var(--biru-tua); }
+  .lightbox__tutup { position: absolute; top: 16px; right: 16px; z-index: 1; }
+  @media (max-width: 600px) {
+    .lightbox[open] { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; align-content: center; gap: 16px 12px; }
+    .lightbox figure { grid-column: 1 / -1; grid-row: 1; }
+    .lightbox img { max-height: calc(100dvh - 200px); }
+    .lightbox__nav--kiri { justify-self: end; }
+  }
+</style>

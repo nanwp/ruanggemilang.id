@@ -1,0 +1,145 @@
+---
+import Base from '../layouts/Base.astro';
+import { kontak, waLink } from '../data/site';
+
+const mapsSrc = `https://www.google.com/maps?q=${encodeURIComponent(kontak.mapsQuery)}&output=embed`;
+const langkah = [
+  { judul: 'Kirim pesan', isi: 'Hubungi kami lewat WhatsApp atau DM Instagram. Sebutkan nama dan domisili.' },
+  { judul: 'Ngobrol singkat', isi: 'Tim humas akan menjelaskan jadwal kegiatan dan peran yang bisa diambil.' },
+  { judul: 'Ikut kegiatan pertama', isi: 'Datang ke kelas pekanan, kenalan dengan relawan lain dan anak-anak.' },
+];
+---
+
+<Base title="Kontak" description="Hubungi Komunitas Gemilang lewat WhatsApp, email, Instagram, atau TikTok. Sekretariat di Jatiluhur, Jatiasih, Bekasi.">
+  <header class="wrap page-head">
+    <p class="catatan">Kontak</p>
+    <h1>Mari ngobrol</h1>
+    <p class="lead">Ingin jadi relawan, berdonasi buku, atau mengajak kolaborasi? Pilih saluran yang paling nyaman.</p>
+  </header>
+
+  <section class="wrap kanal-wrap">
+    <ul class="kanal">
+      <li class="kanal__utama">
+        <span class="kanal__label">WhatsApp</span>
+        {kontak.whatsapp.map((w) => (
+          <a href={`https://wa.me/${w.nomor}`} target="_blank" rel="noopener">{w.label}</a>
+        ))}
+        <a class="btn btn--utama" href={waLink()} target="_blank" rel="noopener">Kirim pesan WhatsApp</a>
+      </li>
+      <li>
+        <span class="kanal__label">Email</span>
+        <a href={`mailto:${kontak.email}`}>{kontak.email}</a>
+      </li>
+      <li>
+        <span class="kanal__label">Instagram</span>
+        <a href={kontak.instagram.url} target="_blank" rel="noopener">{kontak.instagram.handle}</a>
+      </li>
+      <li>
+        <span class="kanal__label">TikTok</span>
+        <a href={kontak.tiktok.url} target="_blank" rel="noopener">{kontak.tiktok.handle}</a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="section section--putih">
+    <div class="wrap lokasi">
+      <div>
+        <h2>Sekretariat</h2>
+        <address>{kontak.alamat}</address>
+        <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(kontak.mapsQuery)}`} target="_blank" rel="noopener">Buka di Google Maps</a>
+      </div>
+      <iframe
+        title="Peta lokasi sekretariat Gemilang"
+        src={mapsSrc}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Cara bergabung jadi relawan</h2>
+      <ol class="langkah">
+        {langkah.map((l) => (
+          <li>
+            <h3>{l.judul}</h3>
+            <p>{l.isi}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .kanal-wrap { padding-bottom: clamp(56px, 8vw, 96px); }
+  .kanal {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 14px;
+  }
+  .kanal li {
+    background: var(--putih);
+    border: 2px solid var(--biru-tua);
+    border-radius: var(--r-md);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+  .kanal a { font-weight: 700; font-size: 1.05rem; overflow-wrap: anywhere; }
+  .kanal__label { font-size: 0.9rem; font-weight: 600; color: var(--tinta-2); }
+  .kanal__utama { background: var(--pensil-muda) !important; box-shadow: 4px 4px 0 var(--biru-tua); }
+  .kanal__utama a { font-family: var(--f-display); font-size: 1.5rem; color: var(--biru-tua); text-decoration: none; }
+  .kanal__utama .btn { font-family: var(--f-body); font-size: 0.95rem; margin-top: 12px; align-self: flex-start; }
+  @media (max-width: 960px) { .kanal { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) {
+    .kanal { grid-template-columns: 1fr; gap: 10px; }
+    .kanal li { padding: 16px 18px; }
+    .kanal__utama .btn { align-self: stretch; justify-content: center; }
+    .lokasi iframe { aspect-ratio: 1 / 1; }
+  }
+
+  .lokasi { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(32px, 5vw, 64px); align-items: start; }
+  .lokasi address { font-style: normal; font-size: 1.15rem; margin-bottom: 16px; max-width: 32ch; }
+  .lokasi a { font-weight: 700; }
+  .lokasi iframe {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border: 2px solid var(--biru-tua);
+    border-radius: var(--r-md);
+    background: var(--biru-muda);
+  }
+  @media (max-width: 860px) { .lokasi { grid-template-columns: 1fr; } }
+
+  /* Langkah benar-benar berurutan, jadi pakai nomor */
+  .langkah {
+    list-style: none;
+    counter-reset: l;
+    margin: 32px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .langkah li { counter-increment: l; border-top: 2px solid var(--biru-tua); padding-top: 18px; }
+  .langkah li::before {
+    content: counter(l);
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--biru);
+    color: var(--putih);
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-size: 1.3rem;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 760px) { .langkah { grid-template-columns: 1fr; } }
+</style>

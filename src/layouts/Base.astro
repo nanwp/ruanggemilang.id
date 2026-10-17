@@ -1,0 +1,60 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title,
+  description = 'GEMILANG (Gerakan Mendidik dengan Ilmu dan Akhlak Cemerlang) adalah komunitas relawan pendidikan di Jatiluhur, Jatiasih, Bekasi yang mendampingi anak belajar literasi, numerasi, dan akhlak.',
+  image = '/img/foto-bersama.webp',
+} = Astro.props;
+const fullTitle = title === 'Beranda' ? 'Gemilang | Komunitas Relawan Pendidikan Bekasi' : `${title} | Gemilang`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="theme-color" content="#0a3f73" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:locale" content="id_ID" />
+  </head>
+  <body>
+    <a class="skip" href="#isi">Lewati ke konten</a>
+    <Header />
+    <main id="isi">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute;
+    left: 16px;
+    top: -60px;
+    z-index: 100;
+    background: var(--pensil);
+    color: var(--biru-tua);
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+  .skip:focus { top: 12px; }
+</style>

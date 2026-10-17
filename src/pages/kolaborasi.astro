@@ -1,0 +1,122 @@
+---
+import Base from '../layouts/Base.astro';
+import { capaian, mitra } from '../data/site';
+
+// Kelompokkan mitra per tahun mulai (tahun pertama yang disebut).
+const perTahun = mitra.reduce<Record<string, typeof mitra>>((acc, m) => {
+  const t = m.tahun.slice(0, 4);
+  (acc[t] ??= []).push(m);
+  return acc;
+}, {});
+const tahunUrut = Object.keys(perTahun).sort();
+---
+
+<Base title="Kolaborasi" description="Capaian program dan daftar mitra kolaborasi Komunitas Gemilang sejak 2025.">
+  <header class="wrap page-head">
+    <p class="catatan">Capaian & kolaborasi</p>
+    <h1>Yang sudah kita kerjakan bersama</h1>
+    <p class="lead">
+      Gemilang tumbuh karena banyak tangan. Berikut hasil yang sudah terasa dan pihak-pihak yang
+      ikut membangunnya.
+    </p>
+  </header>
+
+  <section class="section section--putih">
+    <div class="wrap">
+      <h2>Capaian program</h2>
+      <div class="capaian">
+        {capaian.map((c) => (
+          <div class="capaian__item">
+            <h3>{c.judul}</h3>
+            <p>{c.isi}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Mitra kolaborasi</h2>
+      <p class="lead">{mitra.length} perorangan dan lembaga yang pernah bekerja sama dengan Gemilang.</p>
+
+      {tahunUrut.map((t) => (
+        <div class="tahun">
+          <h3 class="tahun__label">{t}</h3>
+          <ul class="tahun__daftar">
+            {perTahun[t].map((m) => (
+              <li>
+                <div class="mitra-nama">
+                  <strong>{m.nama}</strong>
+                  {m.peran && <span>{m.peran}</span>}
+                </div>
+                <p>{m.kegiatan}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section--biru">
+    <div class="wrap undangan">
+      <div>
+        <h2>Ingin berkolaborasi?</h2>
+        <p>
+          Kami terbuka untuk kampus, sekolah, komunitas, lembaga, dan perorangan yang ingin menjadi
+          narasumber, mengisi kegiatan, atau mendukung taman baca.
+        </p>
+      </div>
+      <a class="btn btn--utama" href="/kontak/">Hubungi kami</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .capaian {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 40px;
+    margin-top: 32px;
+  }
+  .capaian__item { padding: 24px 0; border-top: 2px solid var(--biru-tua); }
+  .capaian__item h3 { font-size: 1.35rem; }
+  .capaian__item p { color: var(--tinta-2); margin: 0; }
+  @media (max-width: 860px) { .capaian { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .capaian { grid-template-columns: 1fr; } }
+
+  .tahun {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .tahun__label {
+    font-size: clamp(2.6rem, 6vw, 4rem);
+    color: var(--biru);
+    position: sticky;
+    top: 96px;
+    align-self: start;
+  }
+  .tahun__daftar { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--biru-tua); }
+  .tahun__daftar li {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 32px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--garis);
+    background: var(--kertas);
+  }
+  .mitra-nama strong { display: block; font-size: 1.05rem; color: var(--biru-tua); }
+  .mitra-nama span { font-size: 0.9rem; color: var(--tinta-2); }
+  .tahun__daftar p { margin: 0; }
+  @media (max-width: 760px) {
+    .tahun { grid-template-columns: 1fr; gap: 0; }
+    .tahun__label { position: static; margin-bottom: 8px; }
+    .tahun__daftar li { grid-template-columns: 1fr; }
+  }
+
+  .undangan { display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; }
+  .undangan p { margin: 0; }
+</style>

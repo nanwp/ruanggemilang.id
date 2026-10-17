@@ -1,0 +1,17 @@
+{
+  "name": "gemilang-web",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5.14.0",
+    "@fontsource-variable/bricolage-grotesque": "^5.2.0",
+    "@fontsource-variable/plus-jakarta-sans": "^5.2.0",
+    "@fontsource/caveat": "^5.2.0"
+  }
+}

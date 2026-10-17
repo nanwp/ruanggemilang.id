@@ -1,0 +1,111 @@
+---
+import { kontak, kutipan } from '../data/site';
+const tahun = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="wrap">
+    <blockquote class="footer__kutipan">
+      <p>“{kutipan}”</p>
+    </blockquote>
+
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="/logo-terang.png" alt="Gemilang" width="900" height="308" />
+        <p>Gerakan Mendidik dengan Ilmu dan Akhlak Cemerlang. Komunitas relawan pendidikan sejak 2025.</p>
+      </div>
+
+      <div>
+        <h2 class="footer__judul">Halaman</h2>
+        <ul>
+          <li><a href="/tentang/">Tentang kami</a></li>
+          <li><a href="/program/">Program</a></li>
+          <li><a href="/kolaborasi/">Kolaborasi</a></li>
+          <li><a href="/galeri/">Galeri</a></li>
+          <li><a href="/kontak/">Kontak</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer__judul">Hubungi</h2>
+        <ul>
+          {kontak.whatsapp.map((w) => (
+            <li><a href={`https://wa.me/${w.nomor}`} target="_blank" rel="noopener">WhatsApp {w.label}</a></li>
+          ))}
+          <li><a href={`mailto:${kontak.email}`}>{kontak.email}</a></li>
+          <li><a href={kontak.instagram.url} target="_blank" rel="noopener">Instagram {kontak.instagram.handle}</a></li>
+          <li><a href={kontak.tiktok.url} target="_blank" rel="noopener">TikTok {kontak.tiktok.handle}</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer__judul">Sekretariat</h2>
+        <address>{kontak.alamat}</address>
+      </div>
+    </div>
+
+    <p class="footer__bawah">© {tahun} Komunitas Gemilang. Dibuat dengan sepenuh hati untuk anak-anak Jatiluhur.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--tinta);
+    color: #c9cbd3;
+    padding-block: clamp(56px, 8vw, 96px) 32px;
+    font-size: 0.95rem;
+  }
+  .footer a { color: #e9ebf2; text-decoration: none; }
+  .footer a:hover { color: var(--pensil); text-decoration: underline; }
+
+  .footer__kutipan {
+    margin: 0 0 clamp(48px, 7vw, 80px);
+    padding: 0 0 0 24px;
+    border-left: 4px solid var(--pensil);
+  }
+  .footer__kutipan p {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+    line-height: 1.2;
+    color: var(--putih);
+    max-width: 34ch;
+    margin: 0;
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr 1.2fr 1fr;
+    gap: 40px;
+  }
+  .footer__brand img { width: 200px; height: auto; margin-bottom: 16px; }
+  .footer__brand p { max-width: 34ch; }
+  .footer__judul {
+    font-family: var(--f-body);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--pensil);
+    letter-spacing: 0;
+    margin-bottom: 14px;
+  }
+  .footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .footer address { font-style: normal; line-height: 1.6; }
+  .footer__bawah {
+    margin: 56px 0 0;
+    padding-top: 24px;
+    border-top: 1px solid #45464d;
+    font-size: 0.85rem;
+    max-width: none;
+  }
+  @media (max-width: 860px) {
+    .footer__grid { grid-template-columns: 1fr 1fr; }
+    .footer__brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 520px) {
+    .footer__grid { grid-template-columns: 1fr 1fr; gap: 32px 20px; }
+    .footer__grid > div:nth-child(3) { grid-column: 1 / -1; order: 3; }
+    .footer__brand img { width: 160px; }
+    .footer__kutipan { padding-left: 16px; margin-bottom: 40px; }
+    .footer__bawah { margin-top: 40px; }
+  }
+</style>

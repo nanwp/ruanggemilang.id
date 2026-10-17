@@ -1,0 +1,185 @@
+---
+import Base from '../layouts/Base.astro';
+import { visi, misi, tujuan, pengurus } from '../data/site';
+
+const ketua = pengurus.find((p) => p.jabatan === 'Ketua Komunitas');
+const lainnya = pengurus.filter((p) => p !== ketua);
+---
+
+<Base title="Tentang" description="Profil, visi, misi, tujuan, dan struktur kepengurusan Komunitas Gemilang di Jatiluhur, Jatiasih, Bekasi.">
+  <header class="wrap page-head">
+    <p class="catatan">Profil singkat</p>
+    <h1>Gerakan anak muda untuk budaya belajar</h1>
+    <p class="lead">
+      GEMILANG, singkatan dari Gerakan Mendidik dengan Ilmu dan Akhlak Cemerlang, adalah komunitas
+      relawan pendidikan yang berdiri pada 2025 dan berbasis di Jatiluhur, Jatiasih, Bekasi.
+    </p>
+  </header>
+
+  <section class="section section--putih">
+    <div class="wrap profil">
+      <img src="/img/relawan-dan-anak.webp" alt="Relawan Gemilang duduk bersama anak-anak di teras rumah warga" loading="lazy" />
+      <div>
+        <h2>Cerita kami</h2>
+        <p>
+          Gemilang lahir dari kepedulian anak muda yang melihat kurangnya lingkungan belajar di luar
+          sekolah. Akibatnya, budaya belajar tidak terbentuk, dan banyak anak terbiasa menggunakan
+          kata, sikap, dan perilaku yang kurang baik di masyarakat.
+        </p>
+        <p>
+          Kami hadir sebagai gerakan kolaboratif yang melibatkan relawan dari berbagai latar
+          belakang. Fokus kami adalah penguatan literasi, numerasi, dan pembentukan akhlak mulia,
+          dengan pendampingan belajar yang menyenangkan, inklusif, dan berbasis karakter.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="visi">
+        <h2>Visi</h2>
+        <p>{visi}</p>
+      </div>
+
+      <div class="dua-kolom">
+        <div>
+          <h2>Misi</h2>
+          <ol class="daftar-nomor">
+            {misi.map((m) => <li>{m}</li>)}
+          </ol>
+        </div>
+        <div>
+          <h2>Tujuan</h2>
+          <ul class="daftar-centang">
+            {tujuan.map((t) => <li>{t}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--putih">
+    <div class="wrap">
+      <h2>Struktur kepengurusan</h2>
+      <p class="lead">Orang-orang yang menjaga roda Gemilang tetap berputar setiap pekan.</p>
+
+      {ketua && (
+        <div class="ketua">
+          <span>{ketua.jabatan}</span>
+          <strong>{ketua.nama[0]}</strong>
+        </div>
+      )}
+
+      <dl class="pengurus">
+        {lainnya.map((p) => (
+          <div>
+            <dt>{p.jabatan}</dt>
+            {p.nama.map((n) => <dd>{n}</dd>)}
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .profil { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
+  .profil img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--r-md); }
+  @media (max-width: 860px) {
+    .profil { grid-template-columns: 1fr; }
+    .profil img { aspect-ratio: 16 / 10; }
+  }
+
+  .visi {
+    background: var(--biru);
+    color: var(--putih);
+    border-radius: var(--r-md);
+    padding: clamp(28px, 5vw, 56px);
+    margin-bottom: clamp(48px, 7vw, 88px);
+    position: relative;
+  }
+  .visi h2 { color: var(--pensil); font-size: 1.4rem; font-family: var(--f-body); letter-spacing: 0; }
+  .visi p {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: clamp(1.45rem, 3vw, 2.3rem);
+    line-height: 1.2;
+    max-width: 38ch;
+    margin: 0;
+  }
+
+  .dua-kolom { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 80px); }
+  @media (max-width: 760px) { .dua-kolom { grid-template-columns: 1fr; } }
+
+  .daftar-nomor { list-style: none; counter-reset: n; margin: 0; padding: 0; }
+  .daftar-nomor li {
+    counter-increment: n;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 12px;
+    padding-block: 14px;
+    border-bottom: 1px solid var(--garis);
+  }
+  .daftar-nomor li::before {
+    content: counter(n) '.';
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-size: 1.6rem;
+    line-height: 1.1;
+    color: var(--margin);
+  }
+
+  .daftar-centang { list-style: none; margin: 0; padding: 0; }
+  .daftar-centang li {
+    position: relative;
+    padding: 14px 0 14px 40px;
+    border-bottom: 1px solid var(--garis);
+  }
+  .daftar-centang li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 19px;
+    width: 18px;
+    height: 10px;
+    border-left: 3px solid var(--biru);
+    border-bottom: 3px solid var(--biru);
+    rotate: -45deg;
+  }
+
+  .ketua {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 16px 0 40px;
+    padding: 18px 26px;
+    background: var(--pensil-muda);
+    border: 2px solid var(--biru-tua);
+    border-radius: var(--r-md);
+    box-shadow: 4px 4px 0 var(--biru-tua);
+  }
+  .ketua span { font-size: 0.9rem; font-weight: 600; color: var(--tinta-2); }
+  .ketua strong { font-family: var(--f-display); font-size: 1.7rem; color: var(--biru-tua); }
+
+  .pengurus {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0 32px;
+    margin: 0;
+  }
+  .pengurus > div { padding: 18px 0; border-top: 2px solid var(--biru-tua); }
+  .pengurus dt { font-weight: 700; color: var(--biru); margin-bottom: 6px; font-size: 0.95rem; }
+  .pengurus dd { margin: 0; font-size: 1.05rem; }
+  @media (max-width: 760px) {
+    .daftar-nomor li { grid-template-columns: 30px 1fr; gap: 8px; padding-block: 12px; }
+    .daftar-nomor li::before { font-size: 1.3rem; }
+    .daftar-centang li { padding-left: 32px; padding-block: 12px; }
+    .daftar-centang li::before { left: 2px; top: 17px; width: 15px; height: 8px; }
+    .ketua { display: flex; margin-bottom: 24px; }
+    .pengurus { grid-template-columns: 1fr 1fr; gap: 0 16px; }
+    .pengurus > div { padding: 14px 0; }
+    .pengurus dd { font-size: 0.95rem; }
+  }
+  @media (max-width: 380px) { .pengurus { grid-template-columns: 1fr; } }
+</style>

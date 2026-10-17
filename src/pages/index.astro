@@ -1,0 +1,309 @@
+---
+import Base from '../layouts/Base.astro';
+import { program, mitra, waLink } from '../data/site';
+import { galeri, fotoUrl } from '../data/galeri';
+
+const pratinjau = galeri.slice(0, 5);
+const namaMitra = [...new Set(mitra.map((m) => m.nama))];
+---
+
+<Base title="Beranda">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero__grid">
+      <div class="hero__teks">
+        <p class="catatan hero__catatan">Setiap pekan di Jatiluhur, Bekasi</p>
+        <h1>Belajar membaca, berhitung, dan berakhlak bersama.</h1>
+        <p class="lead">
+          Gemilang adalah komunitas relawan muda yang membuka ruang belajar di luar sekolah untuk
+          anak-anak di sekitar kita: gratis, menyenangkan, dan dekat dengan rumah.
+        </p>
+        <div class="hero__aksi">
+          <a class="btn btn--utama" href={waLink('Halo Gemilang, saya ingin bergabung menjadi relawan.')} target="_blank" rel="noopener">
+            Daftar jadi relawan
+          </a>
+          <a class="btn btn--garis" href="/program/">Lihat program</a>
+        </div>
+      </div>
+
+      <div class="hero__foto" aria-hidden="false">
+        <figure class="tempel tempel--besar">
+          <img src="/img/foto-bersama.webp" alt="Foto bersama relawan Gemilang dan puluhan anak peserta" width="568" height="553" fetchpriority="high" />
+        </figure>
+        <figure class="tempel tempel--kecil">
+          <img src="/img/belajar-bawah-pohon.webp" alt="Anak-anak belajar di atas tikar di bawah pohon" width="900" height="1200" />
+          <figcaption class="catatan">belajar di bawah pohon</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- LATAR -->
+  <section class="section section--putih">
+    <div class="wrap latar">
+      <h2>Kenapa Gemilang ada</h2>
+      <div class="latar__isi">
+        <p>
+          Kami melihat banyak anak di lingkungan kami tidak punya tempat belajar selepas sekolah. Tanpa
+          lingkungan belajar, budaya belajar sulit tumbuh, dan kata-kata serta sikap yang kurang baik
+          mudah ditiru.
+        </p>
+        <p>
+          Tahun 2025, sekelompok anak muda Jatiluhur memutuskan untuk turun tangan. Kami menggelar
+          tikar, membawa buku, dan mengajak anak-anak belajar bersama. Sekarang Gemilang sudah
+          menggerakkan relawan dari berbagai latar belakang dan bekerja sama dengan
+          {' '}{namaMitra.length} mitra.
+        </p>
+        <a href="/tentang/">Baca profil lengkap kami</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIGA PELAJARAN -->
+  <section class="section">
+    <div class="wrap">
+      <div class="judul-blok">
+        <h2>Tiga hal yang kami ajarkan</h2>
+        <p class="lead">Setiap pertemuan memadukan kemampuan dasar dengan pembiasaan karakter.</p>
+      </div>
+
+      <ul class="pelajaran">
+        {program.map((p) => (
+          <li class="pelajaran__item">
+            <span class="pelajaran__simbol" aria-hidden="true">{p.simbol}</span>
+            <div class="pelajaran__teks">
+              <h3>{p.nama}</h3>
+              <p>{p.ringkas}</p>
+              <a href={`/program/#${p.id}`}>Rincian kelas {p.nama.toLowerCase()}</a>
+            </div>
+            <img src={p.foto} alt="" loading="lazy" width="900" height="1200" />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- MITRA -->
+  <section class="section section--biru">
+    <div class="wrap mitra">
+      <div>
+        <h2>Bergerak bersama warga</h2>
+        <p>
+          Karang taruna, sekolah, masjid, kampus, pendongeng, sampai pemadam kebakaran pernah ikut
+          mengisi kegiatan Gemilang.
+        </p>
+        <a class="btn btn--utama" href="/kolaborasi/">Lihat semua kolaborasi</a>
+      </div>
+      <ul class="mitra__daftar">
+        {namaMitra.map((n) => <li>{n}</li>)}
+        <li class="mitra__lagi"><a href="/kolaborasi/">dan {namaMitra.length - 8} mitra lainnya</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- GALERI -->
+  <section class="section">
+    <div class="wrap">
+      <div class="judul-blok judul-blok--baris">
+        <h2>Dari kegiatan kami</h2>
+        <a class="btn btn--garis" href="/galeri/">Buka galeri</a>
+      </div>
+      <div class="galeri-mini">
+        {pratinjau.map((f) => (
+          <a href="/galeri/" class="galeri-mini__item">
+            <img src={fotoUrl(f.src)} alt={f.alt} loading="lazy" />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- AJAKAN -->
+  <section class="section section--putih">
+    <div class="wrap">
+      <h2>Ikut bergerak</h2>
+      <div class="ajakan">
+        <div>
+          <h3>Jadi relawan</h3>
+          <p>Mahasiswa, pekerja, atau siapa pun yang mau berbagi waktu di akhir pekan. Tidak harus berlatar pendidikan.</p>
+          <a href={waLink('Halo Gemilang, saya ingin bergabung menjadi relawan.')} target="_blank" rel="noopener">Daftar lewat WhatsApp</a>
+        </div>
+        <div>
+          <h3>Donasi buku</h3>
+          <p>Bantu kami membangun taman baca. Buku cerita anak, buku bergambar, dan alat tulis sangat berarti.</p>
+          <a href={waLink('Halo Gemilang, saya ingin berdonasi buku untuk taman baca.')} target="_blank" rel="noopener">Tanya cara donasi</a>
+        </div>
+        <div>
+          <h3>Ajak berkolaborasi</h3>
+          <p>Lembaga, kampus, atau komunitas yang ingin mengisi materi, menjadi narasumber, atau mengadakan kegiatan bersama.</p>
+          <a href="/kontak/">Hubungi tim kami</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* HERO */
+  .hero {
+    position: relative;
+    padding-block: clamp(40px, 7vw, 96px) clamp(56px, 8vw, 112px);
+  }
+  /* garis margin merah buku tulis */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: max(12px, calc((100vw - var(--wrap)) / 2 - 8px));
+    border-left: 2px solid var(--margin);
+    opacity: 0.55;
+  }
+  .hero__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+  .hero__catatan { margin-bottom: 12px; transform: rotate(-2deg); transform-origin: left; }
+  .hero h1 { font-size: clamp(2.6rem, 5.6vw, 4.6rem); }
+  .hero__aksi { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+  .hero__foto { position: relative; min-height: 460px; }
+  .tempel {
+    position: absolute;
+    margin: 0;
+    background: var(--putih);
+    padding: 10px 10px 14px;
+    box-shadow: 0 1px 0 var(--garis), 0 18px 34px -18px rgb(7 44 82 / 0.45);
+  }
+  .tempel::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    width: 96px;
+    height: 26px;
+    translate: -50% 0;
+    background: rgb(246 184 0 / 0.72);
+    rotate: -3deg;
+  }
+  .tempel img { width: 100%; height: 100%; object-fit: cover; }
+  .tempel--besar { top: 0; right: 0; width: 86%; aspect-ratio: 1 / 1; rotate: 2deg; }
+  .tempel--kecil { bottom: -24px; left: 0; width: 46%; aspect-ratio: 3 / 4; rotate: -5deg; }
+  .tempel--kecil img { height: calc(100% - 30px); }
+  .tempel--kecil figcaption { font-size: 1.3rem; text-align: center; color: var(--biru-tua); }
+
+  @media (max-width: 860px) {
+    .hero__grid { grid-template-columns: 1fr; }
+    .hero__foto { min-height: 0; aspect-ratio: 1 / 0.9; max-width: 520px; width: 100%; margin-inline: auto; }
+  }
+  @media (max-width: 760px) {
+    .hero { padding-block: 28px 72px; }
+    .hero::before { display: none; }
+    .hero__grid { gap: 36px; }
+    .hero h1 { font-size: clamp(2.3rem, 10.5vw, 3rem); }
+    .hero__aksi { margin-top: 20px; }
+    .hero__aksi { gap: 10px; }
+    .hero__aksi .btn { flex: 1 1 auto; justify-content: center; padding-inline: 0.9em; white-space: nowrap; font-size: 0.95rem; }
+    .tempel { padding: 6px 6px 10px; }
+    .tempel::before { width: 64px; height: 18px; top: -9px; }
+    .tempel--besar { width: 84%; }
+    .tempel--kecil { left: 3%; bottom: -36px; width: 44%; }
+    .tempel--kecil img { height: calc(100% - 24px); }
+    .tempel--kecil figcaption { font-size: 1.05rem; }
+  }
+
+  /* LATAR */
+  .latar { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 48px; }
+  .latar__isi a { font-weight: 700; }
+  @media (max-width: 860px) { .latar { grid-template-columns: 1fr; gap: 8px; } }
+
+  .judul-blok { margin-bottom: clamp(32px, 5vw, 56px); }
+  .judul-blok--baris { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; }
+  .judul-blok--baris h2 { margin: 0; }
+
+  /* PELAJARAN: setiap mata pelajaran satu baris, seperti jadwal di buku */
+  .pelajaran { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--biru-tua); }
+  .pelajaran__item {
+    display: grid;
+    grid-template-columns: 180px 1fr 220px;
+    gap: clamp(20px, 4vw, 48px);
+    align-items: center;
+    padding-block: 28px;
+    border-bottom: 2px solid var(--biru-tua);
+  }
+  .pelajaran__simbol {
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-size: clamp(3.4rem, 7vw, 5.5rem);
+    line-height: 1;
+    color: var(--biru);
+  }
+  .pelajaran__item:nth-child(2) .pelajaran__simbol { color: var(--pensil); -webkit-text-stroke: 2px var(--biru-tua); }
+  .pelajaran__item:nth-child(3) .pelajaran__simbol { color: var(--margin); }
+  .pelajaran__teks h3 { font-size: clamp(1.7rem, 3vw, 2.3rem); margin-bottom: 6px; }
+  .pelajaran__teks p { margin-bottom: 8px; }
+  .pelajaran__teks a { font-weight: 700; }
+  .pelajaran__item img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r-md); }
+  @media (max-width: 760px) {
+    .pelajaran__item {
+      grid-template-columns: auto 1fr;
+      grid-template-areas: 'foto foto' 'simbol teks';
+      gap: 16px 14px;
+      align-items: start;
+      padding-block: 24px;
+    }
+    .pelajaran__item img { grid-area: foto; aspect-ratio: 16 / 9; }
+    .pelajaran__simbol { grid-area: simbol; font-size: 2.6rem; min-width: 64px; }
+    .pelajaran__teks { grid-area: teks; }
+    .pelajaran__teks h3 { font-size: 1.6rem; }
+  }
+
+  /* MITRA */
+  .mitra { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(32px, 6vw, 80px); align-items: start; }
+  .mitra p { margin-bottom: 28px; }
+  .mitra__daftar { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .mitra__daftar li {
+    padding: 7px 14px;
+    border: 1.5px solid rgb(255 255 255 / 0.35);
+    border-radius: 999px;
+    font-size: 0.92rem;
+    color: var(--putih);
+  }
+  .mitra__lagi { display: none; }
+  .mitra__lagi a { color: var(--pensil); font-weight: 700; }
+  @media (max-width: 860px) { .mitra { grid-template-columns: 1fr; } }
+  @media (max-width: 760px) {
+    .mitra .btn { display: none; }
+    .mitra p { margin-bottom: 0; }
+    .mitra__daftar { gap: 6px; }
+    .mitra__daftar li { font-size: 0.85rem; padding: 6px 12px; }
+    .mitra__daftar li:nth-child(n + 9):not(.mitra__lagi) { display: none; }
+    .mitra__lagi { display: block !important; border-color: var(--pensil) !important; }
+  }
+
+  /* GALERI MINI */
+  .galeri-mini { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 140px; gap: 10px; }
+  .galeri-mini__item { overflow: hidden; border-radius: var(--r-sm); background: var(--biru-muda); }
+  .galeri-mini__item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+  .galeri-mini__item:hover img { transform: scale(1.04); }
+  .galeri-mini__item:nth-child(1) { grid-column: span 3; grid-row: span 2; }
+  .galeri-mini__item:nth-child(2) { grid-column: span 3; grid-row: span 2; }
+  .galeri-mini__item:nth-child(n + 3) { grid-column: span 2; grid-row: span 2; }
+  @media (max-width: 760px) {
+    .galeri-mini { grid-template-columns: 1fr 1fr; grid-auto-rows: 130px; }
+    .galeri-mini__item:nth-child(n) { grid-column: span 1; grid-row: span 1; }
+    .galeri-mini__item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  }
+
+  /* AJAKAN */
+  .ajakan { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 48px); margin-top: 32px; }
+  .ajakan > div { border-top: 4px solid var(--pensil); padding-top: 20px; }
+  .ajakan a { font-weight: 700; }
+  @media (max-width: 760px) {
+    .ajakan { grid-template-columns: 1fr; gap: 28px; margin-top: 20px; }
+    .ajakan > div { padding-top: 14px; }
+    .ajakan p { margin-bottom: 8px; }
+  }
+</style>

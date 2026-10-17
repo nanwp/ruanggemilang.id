@@ -1,0 +1,121 @@
+---
+import Base from '../layouts/Base.astro';
+import { program, kegiatan, waLink } from '../data/site';
+---
+
+<Base title="Program" description="Program utama Gemilang: kelas literasi, numerasi, dan akhlak untuk anak-anak, serta kegiatan seperti Generasi, parenting, dan festival.">
+  <header class="wrap page-head">
+    <p class="catatan">Program utama</p>
+    <h1>Literasi, numerasi, akhlak</h1>
+    <p class="lead">
+      Tiga kelas inti yang kami jalankan setiap pekan. Anak belajar lewat bacaan, permainan, dan
+      kejadian sehari-hari, bukan hafalan.
+    </p>
+    <nav class="lompat" aria-label="Lompat ke program">
+      {program.map((p) => <a href={`#${p.id}`}>{p.nama}</a>)}
+    </nav>
+  </header>
+
+  {program.map((p, i) => (
+    <section id={p.id} class:list={['section', 'prog', { 'section--putih': i % 2 === 0 }]}>
+      <div class:list={['wrap', 'prog__grid', { 'prog__grid--balik': i % 2 === 1 }]}>
+        <div class="prog__foto">
+          <img src={p.foto} alt={`Kegiatan kelas ${p.nama.toLowerCase()} Gemilang`} loading="lazy" />
+          <span class="prog__simbol" aria-hidden="true">{p.simbol}</span>
+        </div>
+        <div>
+          <h2>Kelas {p.nama.toLowerCase()}</h2>
+          <p class="lead">{p.ringkas}</p>
+          <h3 class="kecil">Yang dilakukan di kelas</h3>
+          <ul class="rincian">
+            {p.rincian.map((r) => <li>{r}</li>)}
+          </ul>
+          <p class="tujuan"><strong>Tujuan:</strong> {p.tujuan}</p>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="section section--biru">
+    <div class="wrap">
+      <h2>Kegiatan lainnya</h2>
+      <p class="kegiatan__intro">Di luar kelas pekanan, kami juga menggelar kegiatan bersama mitra dan warga.</p>
+      <div class="kegiatan">
+        {kegiatan.map((k) => (
+          <div>
+            <h3>{k.nama}</h3>
+            <p>{k.isi}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap cta">
+      <h2>Mau ikut mengajar?</h2>
+      <p class="lead">Kami selalu butuh kakak pendamping untuk membaca, berhitung, dan bercerita bersama anak-anak.</p>
+      <a class="btn btn--utama" href={waLink('Halo Gemilang, saya ingin bergabung menjadi relawan pengajar.')} target="_blank" rel="noopener">Daftar jadi relawan</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .lompat { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .lompat a {
+    padding: 8px 18px;
+    border: 2px solid var(--biru-tua);
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--biru-tua);
+    background: var(--putih);
+  }
+  .lompat a:hover { background: var(--pensil-muda); }
+
+  .prog { scroll-margin-top: 72px; }
+  .prog__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 80px); align-items: center; }
+  .prog__grid--balik .prog__foto { order: 2; }
+  .prog__foto { position: relative; }
+  .prog__foto img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--r-md); }
+  .prog__simbol {
+    position: absolute;
+    bottom: -20px;
+    right: -12px;
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    line-height: 1;
+    background: var(--pensil);
+    color: var(--biru-tua);
+    padding: 14px 20px;
+    border-radius: var(--r-md);
+    border: 2px solid var(--biru-tua);
+  }
+  .kecil { font-family: var(--f-body); font-size: 1rem; font-weight: 700; color: var(--tinta); letter-spacing: 0; margin-top: 28px; }
+  .rincian { margin: 0 0 24px; padding-left: 1.2em; }
+  .rincian li { padding: 4px 0; }
+  .rincian li::marker { color: var(--margin); }
+  .tujuan {
+    background: var(--biru-muda);
+    border-left: 4px solid var(--biru);
+    padding: 14px 18px;
+    border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  }
+  @media (max-width: 860px) {
+    .prog__grid { grid-template-columns: 1fr; }
+    .prog__grid--balik .prog__foto { order: 0; }
+    .prog__foto img { aspect-ratio: 16 / 11; }
+    .prog__simbol { right: 12px; }
+  }
+
+  .kegiatan__intro { margin-bottom: 40px; }
+  .kegiatan { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 40px; }
+  .kegiatan > div { border-top: 1.5px solid rgb(255 255 255 / 0.3); padding: 22px 0 10px; }
+  .kegiatan h3 { font-size: 1.35rem; }
+  @media (max-width: 860px) { .kegiatan { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .kegiatan { grid-template-columns: 1fr; } }
+
+  .cta { text-align: left; }
+  .cta .lead { margin-bottom: 24px; }
+</style>

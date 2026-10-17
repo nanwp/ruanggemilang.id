@@ -1,0 +1,152 @@
+---
+import { waLink } from '../data/site';
+
+const menu = [
+  { href: '/', label: 'Beranda' },
+  { href: '/tentang/', label: 'Tentang' },
+  { href: '/program/', label: 'Program' },
+  { href: '/kolaborasi/', label: 'Kolaborasi' },
+  { href: '/galeri/', label: 'Galeri' },
+  { href: '/kontak/', label: 'Kontak' },
+];
+const path = Astro.url.pathname;
+const aktif = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="header">
+  <div class="wrap header__bar">
+    <a href="/" class="header__logo" aria-label="Gemilang, ke beranda">
+      <img src="/logo.png" alt="Gemilang" width="900" height="304" />
+    </a>
+
+    <button class="header__toggle" aria-expanded="false" aria-controls="menu-utama">
+      <span class="sr-only">Buka menu</span>
+      <span class="burger" aria-hidden="true"></span>
+    </button>
+
+    <nav id="menu-utama" class="header__nav" aria-label="Menu utama">
+      <ul>
+        {menu.map((m) => (
+          <li>
+            <a href={m.href} aria-current={aktif(m.href) ? 'page' : undefined}>{m.label}</a>
+          </li>
+        ))}
+      </ul>
+      <a class="btn btn--utama header__cta" href={waLink('Halo Gemilang, saya ingin bergabung menjadi relawan.')} target="_blank" rel="noopener">
+        Jadi relawan
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.header__toggle');
+  const nav = document.getElementById('menu-utama');
+  btn?.addEventListener('click', () => {
+    const buka = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', String(buka));
+    nav?.classList.toggle('is-open', buka);
+    document.body.style.overflow = buka ? 'hidden' : '';
+  });
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(255 255 255 / 0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--biru-tua);
+  }
+  .header__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 72px;
+  }
+  .header__logo img { height: 46px; width: auto; }
+
+  .header__nav { display: flex; align-items: center; gap: 28px; }
+  .header__nav ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+  .header__nav li a {
+    display: block;
+    padding: 8px 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--tinta);
+    text-decoration: none;
+    border-radius: 999px;
+  }
+  .header__nav li a:hover { background: var(--biru-muda); color: var(--biru-tua); }
+  .header__nav li a[aria-current='page'] {
+    color: var(--biru-tua);
+    background: var(--pensil-muda);
+    box-shadow: inset 0 -3px 0 var(--pensil);
+  }
+  .header__cta { padding: 0.75em 1.2em; font-size: 0.92rem; }
+
+  .header__toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: 2px solid var(--biru-tua);
+    border-radius: 12px;
+    background: var(--putih);
+    cursor: pointer;
+    place-items: center;
+  }
+  .burger,
+  .burger::before,
+  .burger::after {
+    display: block;
+    width: 20px;
+    height: 2.5px;
+    background: var(--biru-tua);
+    border-radius: 2px;
+    position: relative;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .burger::before,
+  .burger::after { content: ''; position: absolute; left: 0; }
+  .burger::before { top: -7px; }
+  .burger::after { top: 7px; }
+  [aria-expanded='true'] .burger { background: transparent; }
+  [aria-expanded='true'] .burger::before { transform: translateY(7px) rotate(45deg); }
+  [aria-expanded='true'] .burger::after { transform: translateY(-7px) rotate(-45deg); }
+
+  @media (max-width: 960px) {
+    /* backdrop-filter membuat elemen fixed di dalamnya ikut terkurung di header */
+    .header { backdrop-filter: none; background: var(--putih); }
+    .header__toggle { display: grid; }
+    .header__logo img { height: 40px; }
+    .header__bar { min-height: 64px; }
+    .header__nav {
+      position: fixed;
+      inset: 66px 0 0 0;
+      background: var(--kertas);
+      flex-direction: column;
+      align-items: stretch;
+      padding: 24px var(--gutter) 40px;
+      gap: 24px;
+      opacity: 0;
+      transform: translateY(-8px);
+      visibility: hidden;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+      overflow-y: auto;
+    }
+    .header__nav.is-open { opacity: 1; transform: none; visibility: visible; transition: opacity 0.2s ease, transform 0.2s ease; }
+    .header__nav ul { flex-direction: column; gap: 0; }
+    .header__nav li a {
+      font-family: var(--f-display);
+      font-size: 1.9rem;
+      font-weight: 700;
+      padding: 10px 0;
+      border-radius: 0;
+      border-bottom: 1px solid var(--garis);
+    }
+    .header__nav li a[aria-current='page'] { background: none; box-shadow: none; color: var(--margin); }
+    .header__cta { justify-content: center; font-size: 1.05rem; padding: 1em; }
+  }
+</style>
