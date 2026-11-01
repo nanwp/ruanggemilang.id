@@ -44,6 +44,32 @@ Buka `src/data/galeri.ts`, lalu tambahkan objek baru:
 
 Setelah mengubah data, jalankan `npm run build` lalu deploy ulang folder `dist/`.
 
+## Menambah berita
+
+Buat file Markdown baru di `src/content/berita/`. Nama file menjadi alamat halaman
+(`kegiatan-baru.md` → `/berita/kegiatan-baru/`).
+
+```md
+---
+judul: 'Judul berita'
+tanggal: 2026-11-15
+kategori: Kegiatan        # opsional, default "Kegiatan"
+ringkasan: 'Satu-dua kalimat untuk kartu berita dan preview di media sosial.'
+sampul: /img/foto-sampul.webp
+sampulAlt: 'Deskripsi foto sampul'
+draft: false              # true = tidak ditampilkan
+---
+
+Isi berita. Paragraf biasa, > untuk kutipan.
+
+<figure>
+  <img src="/img/foto.webp" alt="Deskripsi foto" loading="lazy" />
+  <figcaption>Keterangan foto.</figcaption>
+</figure>
+```
+
+Berita diurutkan dari tanggal terbaru. Tiga berita terbaru juga tampil di beranda.
+
 ## Deploy dengan Docker Compose (VPS)
 
 Image dibangun dua tahap: Node membuat situs statis, lalu nginx (di dalam container) menyajikannya.

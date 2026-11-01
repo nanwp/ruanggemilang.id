@@ -7,12 +7,14 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  type?: 'website' | 'article';
 }
 
 const {
   title,
   description = 'GEMILANG (Gerakan Mendidik dengan Ilmu dan Akhlak Cemerlang) adalah komunitas relawan pendidikan di Jatiluhur, Jatiasih, Bekasi yang mendampingi anak belajar literasi, numerasi, dan akhlak.',
   image = '/img/foto-bersama.webp',
+  type = 'website',
 } = Astro.props;
 const fullTitle = title === 'Beranda' ? 'Gemilang | Komunitas Relawan Pendidikan Bekasi' : `${title} | Gemilang`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -28,7 +30,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="theme-color" content="#0a3f73" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(image, Astro.site)} />

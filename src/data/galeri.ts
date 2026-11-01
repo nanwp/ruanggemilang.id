@@ -28,6 +28,10 @@ export type Foto = {
 export const S3_BASE = '';
 
 export const galeri: Foto[] = [
+  { src: '/img/gemilang-uia1.webp', alt: 'Foto bersama anak-anak, orang tua, relawan Gemilang, dan mahasiswa UIA', kegiatan: 'Bulan Bahasa & Ekonomi Berdaya', tahun: '2026', tanggal: '1 Nov 2026' },
+  { src: '/img/gemilang-uia3.webp', alt: 'Anak-anak tampil di panggung Bulan Bahasa', kegiatan: 'Bulan Bahasa & Ekonomi Berdaya', tahun: '2026', tanggal: '1 Nov 2026' },
+  { src: '/img/gemilang-uia2.webp', alt: 'Mahasiswa FIKES UIA memeriksa tekanan darah warga', kegiatan: 'Bulan Bahasa & Ekonomi Berdaya', tahun: '2026', tanggal: '1 Nov 2026' },
+  { src: '/img/gemilang-uia4.webp', alt: 'Relawan Gemilang bersama mahasiswa BEM FEB dan FIKES UIA', kegiatan: 'Bulan Bahasa & Ekonomi Berdaya', tahun: '2026', tanggal: '1 Nov 2026' },
   { src: '/img/foto-bersama.webp', alt: 'Foto bersama relawan dan puluhan anak peserta di aula', kegiatan: 'Generasi', tahun: '2025' },
   { src: '/img/belajar-bawah-pohon.webp', alt: 'Anak-anak duduk di atas tikar belajar bersama di bawah pohon', kegiatan: 'Generasi', tahun: '2025' },
   { src: '/img/mendampingi-membaca.webp', alt: 'Relawan mendampingi anak membaca di meja kecil', kegiatan: 'Kelas Literasi', tahun: '2025' },

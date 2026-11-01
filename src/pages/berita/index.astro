@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import KartuBerita from '../../components/KartuBerita.astro';
+import { ambilBerita } from '../../data/berita';
+import { kontak } from '../../data/site';
+
+const daftar = await ambilBerita();
+---
+
+<Base title="Berita" description="Kabar dan cerita terbaru dari kegiatan Komunitas Gemilang.">
+  <header class="wrap page-head">
+    <p class="catatan">Kabar terbaru</p>
+    <h1>Berita & cerita kegiatan</h1>
+    <p class="lead">
+      Catatan dari kelas pekanan, acara, dan kolaborasi Gemilang. Kabar harian ada di
+      <a href={kontak.instagram.url} target="_blank" rel="noopener">{kontak.instagram.handle}</a>.
+    </p>
+  </header>
+
+  <section class="wrap berita-wrap">
+    {daftar.length === 0 ? (
+      <p class="kosong">Belum ada berita.</p>
+    ) : (
+      <div class="berita-grid">
+        {daftar.map((b, i) => <KartuBerita berita={b} utama={i === 0} />)}
+      </div>
+    )}
+  </section>
+</Base>
+
+<style>
+  .berita-wrap { padding-bottom: clamp(64px, 9vw, 120px); }
+  .berita-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 32px); }
+  @media (max-width: 960px) { .berita-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .berita-grid { grid-template-columns: 1fr; } }
+  .kosong { padding: 48px; border: 2px dashed var(--biru); border-radius: var(--r-md); text-align: center; max-width: none; }
+</style>

@@ -1,0 +1,129 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import KartuBerita from '../../components/KartuBerita.astro';
+import { ambilBerita, formatTanggal } from '../../data/berita';
+import { waLink } from '../../data/site';
+
+export async function getStaticPaths() {
+  const semua = await ambilBerita();
+  return semua.map((berita) => ({
+    params: { id: berita.id },
+    props: { berita, lainnya: semua.filter((b) => b.id !== berita.id).slice(0, 3) },
+  }));
+}
+
+const { berita, lainnya } = Astro.props;
+const { judul, tanggal, ringkasan, sampul, sampulAlt, kategori } = berita.data;
+const { Content } = await render(berita);
+---
+
+<Base title={judul} description={ringkasan} image={sampul} type="article">
+  <article>
+    <header class="wrap artikel__kepala">
+      <a class="kembali" href="/berita/">← Semua berita</a>
+      <p class="artikel__meta">
+        <span class="artikel__kategori">{kategori}</span>
+        <time datetime={tanggal.toISOString().slice(0, 10)}>{formatTanggal(tanggal)}</time>
+      </p>
+      <h1>{judul}</h1>
+      <p class="lead">{ringkasan}</p>
+    </header>
+
+    <figure class="wrap artikel__sampul">
+      <img src={sampul} alt={sampulAlt} fetchpriority="high" />
+    </figure>
+
+    <div class="wrap">
+      <div class="prosa">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  <section class="section section--biru">
+    <div class="wrap undangan">
+      <div>
+        <h2>Mau ikut di kegiatan berikutnya?</h2>
+        <p>Kami selalu mencari relawan, narasumber, dan mitra yang ingin berbagi untuk anak-anak.</p>
+      </div>
+      <a class="btn btn--utama" href={waLink('Halo Gemilang, saya ingin ikut kegiatan berikutnya.')} target="_blank" rel="noopener">
+        Hubungi lewat WhatsApp
+      </a>
+    </div>
+  </section>
+
+  {lainnya.length > 0 && (
+    <section class="section">
+      <div class="wrap">
+        <h2>Berita lainnya</h2>
+        <div class="lainnya">
+          {lainnya.map((b) => <KartuBerita berita={b} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .artikel__kepala { padding-block: clamp(40px, 6vw, 80px) clamp(24px, 4vw, 40px); max-width: calc(860px + 2 * var(--gutter)); }
+  .kembali { display: inline-block; font-weight: 700; text-decoration: none; margin-bottom: 24px; }
+  .kembali:hover { text-decoration: underline; }
+  .artikel__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; color: var(--tinta-2); font-size: 0.95rem; margin-bottom: 16px; }
+  .artikel__kategori { padding: 4px 12px; border-radius: 999px; background: var(--pensil-muda); color: var(--biru-tua); font-weight: 700; }
+  .artikel__kepala h1 { font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.08; }
+
+  .artikel__sampul { margin: 0 auto clamp(32px, 5vw, 56px); }
+  .artikel__sampul img {
+    width: 100%;
+    max-height: 640px;
+    object-fit: cover;
+    border-radius: var(--r-md);
+    border: 2px solid var(--biru-tua);
+    box-shadow: 6px 6px 0 var(--biru-tua);
+  }
+
+  /* Isi artikel dari Markdown. Latar putih supaya garis kertas tidak memotong teks. */
+  .prosa {
+    max-width: 760px;
+    margin: 0 auto clamp(64px, 9vw, 112px);
+    padding: clamp(24px, 4vw, 48px);
+    background: var(--putih);
+    border-radius: var(--r-md);
+    font-size: 1.1rem;
+    line-height: 1.75;
+  }
+  .prosa :global(p) { max-width: none; margin-bottom: 1.25em; }
+  .prosa :global(> :last-child) { margin-bottom: 0; }
+  .prosa :global(h2) { font-size: clamp(1.6rem, 3vw, 2rem); margin-top: 1.6em; }
+  .prosa :global(h3) { margin-top: 1.4em; }
+  .prosa :global(figure) { margin: 2em 0; }
+  .prosa :global(figure img),
+  .prosa :global(p > img) { width: 100%; border-radius: var(--r-sm); }
+  .prosa :global(figcaption) { margin-top: 10px; font-size: 0.92rem; color: var(--tinta-2); line-height: 1.5; }
+  .prosa :global(blockquote) {
+    margin: 2em 0;
+    padding: 4px 0 4px 24px;
+    border-left: 4px solid var(--pensil);
+    font-family: var(--f-display);
+    font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--biru-tua);
+  }
+  .prosa :global(blockquote p) { margin: 0; }
+  .prosa :global(ul), .prosa :global(ol) { padding-left: 1.4em; margin: 0 0 1.25em; }
+
+  @media (max-width: 600px) {
+    .prosa { padding: 0; background: none; font-size: 1.02rem; }
+    .artikel__sampul img { box-shadow: 4px 4px 0 var(--biru-tua); }
+    .prosa :global(blockquote) { padding-left: 16px; }
+  }
+
+  .undangan { display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; }
+  .undangan p { margin: 0; }
+
+  .lainnya { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 32px); margin-top: 32px; }
+  @media (max-width: 960px) { .lainnya { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .lainnya { grid-template-columns: 1fr; } }
+</style>

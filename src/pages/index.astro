@@ -2,8 +2,11 @@
 import Base from '../layouts/Base.astro';
 import { program, mitra, waLink } from '../data/site';
 import { galeri, fotoUrl } from '../data/galeri';
+import { ambilBerita } from '../data/berita';
+import KartuBerita from '../components/KartuBerita.astro';
 
 const pratinjau = galeri.slice(0, 5);
+const beritaTerbaru = (await ambilBerita()).slice(0, 3);
 const namaMitra = [...new Set(mitra.map((m) => m.nama))];
 ---
 
@@ -100,6 +103,21 @@ const namaMitra = [...new Set(mitra.map((m) => m.nama))];
       </ul>
     </div>
   </section>
+
+  <!-- BERITA -->
+  {beritaTerbaru.length > 0 && (
+    <section class="section section--putih">
+      <div class="wrap">
+        <div class="judul-blok judul-blok--baris">
+          <h2>Kabar terbaru</h2>
+          <a class="btn btn--garis" href="/berita/">Semua berita</a>
+        </div>
+        <div class="berita-beranda">
+          {beritaTerbaru.map((b, i) => <KartuBerita berita={b} utama={i === 0} />)}
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- GALERI -->
   <section class="section">
@@ -282,6 +300,10 @@ const namaMitra = [...new Set(mitra.map((m) => m.nama))];
     .mitra__daftar li:nth-child(n + 9):not(.mitra__lagi) { display: none; }
     .mitra__lagi { display: block !important; border-color: var(--pensil) !important; }
   }
+
+  /* BERITA */
+  .berita-beranda { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 32px); }
+  @media (max-width: 600px) { .berita-beranda { grid-template-columns: 1fr; } }
 
   /* GALERI MINI */
   .galeri-mini { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 140px; gap: 10px; }
