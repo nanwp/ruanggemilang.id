@@ -28,6 +28,10 @@ export type Foto = {
 export const S3_BASE = '';
 
 export const galeri: Foto[] = [
+  { src: '/img/gemilang-pengabdian2.webp', alt: 'Foto bersama relawan Komunitas Gemilang di depan spanduk Generasi', kegiatan: 'In House Training Relawan', tahun: '2026', tanggal: '12 Nov 2026' },
+  { src: '/img/gemilang-pengabdian4.webp', alt: 'Kak Wilda Rosalina memaparkan materi In House Training', kegiatan: 'In House Training Relawan', tahun: '2026', tanggal: '12 Nov 2026' },
+  { src: '/img/gemilang-pengabdian1.webp', alt: 'Para relawan duduk melingkar menyimak materi', kegiatan: 'In House Training Relawan', tahun: '2026', tanggal: '12 Nov 2026' },
+  { src: '/img/gemilang-pengabdian3.webp', alt: 'Relawan bertepuk tangan bersama dalam sesi kelompok', kegiatan: 'In House Training Relawan', tahun: '2026', tanggal: '12 Nov 2026' },
   { src: '/img/gemilang-uia1.webp', alt: 'Foto bersama anak-anak, orang tua, relawan Gemilang, dan mahasiswa UIA', kegiatan: 'Bulan Bahasa & Ekonomi Berdaya', tahun: '2026', tanggal: '1 Nov 2026' },
   { src: '/img/gemilang-uia3.webp', alt: 'Anak-anak tampil di panggung Bulan Bahasa', kegiatan: 'Bulan Bahasa & Ekonomi Berdaya', tahun: '2026', tanggal: '1 Nov 2026' },
   { src: '/img/gemilang-uia2.webp', alt: 'Mahasiswa FIKES UIA memeriksa tekanan darah warga', kegiatan: 'Bulan Bahasa & Ekonomi Berdaya', tahun: '2026', tanggal: '1 Nov 2026' },
